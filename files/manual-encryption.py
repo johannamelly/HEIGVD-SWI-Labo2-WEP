@@ -19,22 +19,22 @@ plain = "Knowing the source of any information is way more important than the in
 plain = "hello-world hello-world hello-world "
 ##1. compute ICV of plain 
 
-icv = binascii.crc32(plain) % (1<<32)
-icvS = struct.pack(">I", icv)
+icv = binascii.crc32(plain) 
+icv = struct.pack("!l", icv)
 ##2. seed -> (RC4) = keystream
 ##3. keystream XOR (plain + ICV) = cipher
-cipher= rc4.re4encrypt(plain + icvS, arp.iv, key)
+cipher= rc4.re4encrypt(plain + icv, arp.iv, key)
 
 
 
 ##4. add shit
 #arp.icv = long(icv.encode("hex"), 16)
-arp.icv = icv
+# arp.icv = 
+print(struct.unpack('!L', icv))
 arp.wepdata = cipher
 
 ###5. Send shit
 wrpcap('arpForged.cap', arp)
-print(hex(icv))
 
 # recuperation de icv dans le message (arp.icv) (en chiffre) -- je passe au format "text". Il y a d'autres manières de faire ceci...
 icv_encrypted='{:x}'.format(arp.icv).decode("hex")
