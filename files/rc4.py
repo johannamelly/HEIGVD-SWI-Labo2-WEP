@@ -38,32 +38,3 @@ def rc4crypt(data, key):
     
     return ''.join(out)
 
-def re4encrypt(data, iv, key):
-	T = []
-	for i in iv:
-		T.append(ord(i))
-	for i in key:
-		T.append(ord(i))
-	print(T)
-	S = range(0,256)
-	j = 0
-	
-	for i in range(0,256):
-		j = (j+S[i] + T[i%len(T)])%256
-		print(j)
-		S[i], S[j] = S[j], S[i]
-
-	i = 0
-	k = 0
-	res = ""
-	
-	for c in data:
-		i = (i+1)%256
-		k = (k+ S[i])%256
-		S[i], S[k] = S[k], S[i]
-		chfr = S[(S[i]+S[k])%256]
-		res=res+''.join(chr(chfr^ord(c)))
-	
-	return res
-crypted = re4encrypt("coucou", "asox", "29dj2i9hdb")
-print(rc4crypt(crypted, "asox29dj2i9hdb"))
